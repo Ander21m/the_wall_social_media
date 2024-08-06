@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:the_wall_social_media/pages/login.dart';
+import 'package:the_wall_social_media/Auth/loginorpassword.dart';
+
 
 void main() {
   runApp(const MyApp());
@@ -10,9 +11,9 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return  MaterialApp(
+    return const MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: LoginPage(),
+      home: LoginOrPassword(),
     );
   }
 }

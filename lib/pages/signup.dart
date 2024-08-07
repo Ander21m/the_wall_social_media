@@ -1,5 +1,6 @@
 
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:the_wall_social_media/component/mybotton.dart';
 import 'package:the_wall_social_media/component/mytextbox.dart';
@@ -18,7 +19,42 @@ class _RegisterPageState extends State<RegisterPage> {
   final TextEditingController passwordController = TextEditingController();
 
   final TextEditingController confirmPasswordController = TextEditingController();
+  void signUp() async{
+    showDialog(context: context, builder: (context){
+      return const  Center(child: CircularProgressIndicator(),);
+    });
 
+    if(passwordController.text != confirmPasswordController.text){
+      Navigator.of(context).pop();
+
+      showError("The passwords are not the same.Please refill again");
+    }
+    else{
+
+      try{
+      
+      await FirebaseAuth.instance.createUserWithEmailAndPassword(email:
+        emailController.text,password:  passwordController.text);
+
+      if(context.mounted){
+        Navigator.of(context).pop();
+      }
+    }
+    on FirebaseAuthException catch(e){
+      Navigator.of(context).pop();
+      showError(e.code);
+    }
+
+    }
+    
+    
+  }
+
+  void showError(String text){
+    showDialog(context: context, builder: (context){
+      return AlertDialog(title: Text(text),);
+    });
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -26,68 +62,70 @@ class _RegisterPageState extends State<RegisterPage> {
       body: Padding(
         padding: const EdgeInsets.all(25),
         child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              
-              const Icon(
-                Icons.lock,
-                size: 100,
-              ),
-              const SizedBox(
-                height: 35,
-              ),
-              Text(
-                "Let's create an account for you!!",
-                style: TextStyle(
-                    color: Colors.grey.shade700, fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(
-                height: 30,
-              ),
-              MyTextField(
-                  controller: emailController,
-                  hintText: "Email",
-                  obscureText: false),
-              const SizedBox(
-                height: 10,
-              ),
-              MyTextField(
-                  controller: passwordController,
-                  hintText: "Password",
-                  obscureText: true),
-              const SizedBox(
-                height: 10,
-              ),
-              MyTextField(
-                  controller: confirmPasswordController,
-                  hintText: "Confirm Password",
-                  obscureText: true),
-              const SizedBox(
-                height: 20,
-              ),
-              MyButton(onTap: () {}, name: "Sign Up"),
-              const SizedBox(
-                height: 15,
-              ),
-              const SizedBox(height: 30,),
-               Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text("Already have an account?",style:TextStyle(color: Colors.grey[700]),),
-                  
-                  const SizedBox(width: 10,),
-                  
-                  GestureDetector(
-                    onTap: widget.onTap,
-                    child: const Text(
-                      "Login Now",
-                      style: TextStyle(color: Colors.blue,fontWeight: FontWeight.bold),
-                    ),
-                  )
-                ],
-              )
-            ],
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                
+                const Icon(
+                  Icons.lock,
+                  size: 100,
+                ),
+                const SizedBox(
+                  height: 35,
+                ),
+                Text(
+                  "Let's create an account for you!!",
+                  style: TextStyle(
+                      color: Colors.grey.shade700, fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(
+                  height: 30,
+                ),
+                MyTextField(
+                    controller: emailController,
+                    hintText: "Email",
+                    obscureText: false),
+                const SizedBox(
+                  height: 10,
+                ),
+                MyTextField(
+                    controller: passwordController,
+                    hintText: "Password",
+                    obscureText: true),
+                const SizedBox(
+                  height: 10,
+                ),
+                MyTextField(
+                    controller: confirmPasswordController,
+                    hintText: "Confirm Password",
+                    obscureText: true),
+                const SizedBox(
+                  height: 20,
+                ),
+                MyButton(onTap: signUp, name: "Sign Up"),
+                const SizedBox(
+                  height: 15,
+                ),
+                const SizedBox(height: 30,),
+                 Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text("Already have an account?",style:TextStyle(color: Colors.grey[700]),),
+                    
+                    const SizedBox(width: 10,),
+                    
+                    GestureDetector(
+                      onTap: widget.onTap,
+                      child: const Text(
+                        "Login Now",
+                        style: TextStyle(color: Colors.blue,fontWeight: FontWeight.bold),
+                      ),
+                    )
+                  ],
+                )
+              ],
+            ),
           ),
         ),
       ),

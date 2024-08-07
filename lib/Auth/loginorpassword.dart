@@ -13,7 +13,7 @@ class LoginOrPassword extends StatefulWidget {
 
 class _LoginOrPasswordState extends State<LoginOrPassword> {
 
-  bool isLogin = false;
+  bool isLogin = true;
 
   void toggle(){
     setState(() {

@@ -1,8 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+
 import 'package:flutter/material.dart';
+import 'package:the_wall_social_media/component/mydrawer.dart';
 import 'package:the_wall_social_media/component/mytextbox.dart';
 import 'package:the_wall_social_media/component/wallpost.dart';
+import 'package:the_wall_social_media/pages/profilepage.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -19,7 +22,8 @@ class _HomePageState extends State<HomePage> {
       FirebaseFirestore.instance.collection("User Posts").add({
         "Message": controller.text,
         "User": FirebaseAuth.instance.currentUser!.email,
-        "TimeStamp": Timestamp.now()
+        "TimeStamp": Timestamp.now(),
+        "Likes": []
         
       });
       setState(() {
@@ -39,14 +43,18 @@ class _HomePageState extends State<HomePage> {
         ),
         centerTitle: true,
         backgroundColor: Colors.grey.shade900,
-        actions: [
-          IconButton(
-              onPressed: FirebaseAuth.instance.signOut,
-              icon: const Icon(
-                Icons.logout,
-                color: Colors.white,
-              ))
-        ],
+        foregroundColor: Colors.white,
+        
+      ),
+    
+      drawer:  MyDrawer(
+        onProfileTap:(){
+          Navigator.of(context).push(MaterialPageRoute(builder: (context){
+            return const ProfilePage();
+          }));
+          
+        } ,
+        onLogoutTap: FirebaseAuth.instance.signOut,
       ),
       backgroundColor: Colors.grey.shade300,
       body: Column(
@@ -62,14 +70,17 @@ class _HomePageState extends State<HomePage> {
                 return const Center(child: CircularProgressIndicator());
               } else {
                 if (snapshot.hasError) {
-                  return Text("Error!!!");
+                  return const Text("Error!!!");
                 } else {
                   return ListView.builder(
                       itemCount: snapshot.data!.docs.length,
                       itemBuilder: (context, index) {
                         return WallPost(
                             message: snapshot.data!.docs[index]["Message"],
-                            user: snapshot.data!.docs[index]["User"]);
+                            user: snapshot.data!.docs[index]["User"],
+                            postId: snapshot.data!.docs[index].id,
+                            likes: List<String>.from(snapshot.data!.docs[index]["Likes"] ?? []),
+                            );
                       });
                 }
               }

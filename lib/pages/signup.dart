@@ -1,5 +1,6 @@
 
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:the_wall_social_media/component/mybotton.dart';
@@ -33,8 +34,13 @@ class _RegisterPageState extends State<RegisterPage> {
 
       try{
       
-      await FirebaseAuth.instance.createUserWithEmailAndPassword(email:
+      UserCredential userInfo = await FirebaseAuth.instance.createUserWithEmailAndPassword(email:
         emailController.text,password:  passwordController.text);
+
+       FirebaseFirestore.instance.collection("Users").doc(userInfo.user!.email).set({
+        "Username" : userInfo.user!.email!.split("@")[0],
+        "Bio" : "Empty Bio...."
+      });
 
       if(context.mounted){
         Navigator.of(context).pop();

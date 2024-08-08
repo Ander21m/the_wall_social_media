@@ -22,7 +22,7 @@ class _ProfilePageState extends State<ProfilePage> {
             backgroundColor: Colors.grey.shade900,
             title: Text(
               "Edit $editField",
-              style: const TextStyle(color: Colors.white),
+              style: const TextStyle(color:Colors.white,),
             ),
             content: TextField(
               autofocus: true,
@@ -31,17 +31,17 @@ class _ProfilePageState extends State<ProfilePage> {
                 finalValue = value;
               },
               decoration: InputDecoration(
-                  hintStyle: TextStyle(color: Colors.grey),
+                  hintStyle: const TextStyle(color: Colors.grey),
                   hintText: "Enter new $editField"),
             ),
             actions: [
               MaterialButton(
                 onPressed: Navigator.of(context).pop,
-                child: Text("Cancel",style: const TextStyle(color: Colors.white),),
+                child: const Text("Cancel",style:  TextStyle(color: Colors.white),),
               ),
               MaterialButton(
                 onPressed:()=> Navigator.of(context).pop(),
-                child: Text("Save",style: const TextStyle(color: Colors.white),),
+                child: const Text("Save",style:  TextStyle(color: Colors.white,)),
               ),
             ],
           );
@@ -78,27 +78,28 @@ class _ProfilePageState extends State<ProfilePage> {
               return Scaffold(
                 appBar: AppBar(
                   centerTitle: true,
-                  title: const Text(
+                  title:  Text(
                     "Profile Page",
-                    style: TextStyle(color: Colors.white),
+                    style: TextStyle(color: Theme.of(context).colorScheme.tertiary),
                   ),
-                  foregroundColor: Colors.white,
-                  backgroundColor: Colors.grey.shade900,
+                  foregroundColor: Theme.of(context).colorScheme.tertiary,
+                  backgroundColor: Theme.of(context).colorScheme.primary,
                 ),
-                backgroundColor: Colors.grey.shade300,
+                backgroundColor: Theme.of(context).colorScheme.surface,
                 body: ListView(
                   children: [
                     const SizedBox(
                       height: 50,
                     ),
-                    const Icon(
+                     Icon(
                       Icons.person,
                       size: 72,
+                      color: Theme.of(context).colorScheme.tertiary,
                     ),
                     Text(
                       FirebaseAuth.instance.currentUser!.email!,
                       textAlign: TextAlign.center,
-                      style: TextStyle(color: Colors.grey.shade600),
+                      style: TextStyle(color: Theme.of(context).colorScheme.primary),
                     ),
                     const SizedBox(
                       height: 35,
@@ -109,7 +110,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text("My Details",
-                              style: TextStyle(color: Colors.grey.shade600)),
+                              style: TextStyle(color: Theme.of(context).colorScheme.primary)),
                           const SizedBox(
                             height: 20,
                           ),
@@ -129,7 +130,7 @@ class _ProfilePageState extends State<ProfilePage> {
                             height: 20,
                           ),
                           Text("My Posts",
-                              style: TextStyle(color: Colors.grey.shade600)),
+                              style: TextStyle(color:  Theme.of(context).colorScheme.primary)),
                         ],
                       ),
                     )
@@ -138,7 +139,7 @@ class _ProfilePageState extends State<ProfilePage> {
               );
             } else {
               return Center(
-                child: Text("Error ${snapshot.error}"),
+                child: Text("Error ${snapshot.error}", style: TextStyle(color: Theme.of(context).colorScheme.tertiary)),
               );
             }
           }
